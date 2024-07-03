@@ -1,0 +1,51 @@
+@startuml
+skinparam MaxMessageSize 120
+skinparam Padding 9
+
+title "Ed Sheeran wants to sell taylor Swift ticket"
+
+'Define participants
+actor "Ed Sheeran" as ed
+participant dApp
+participant privy
+participant biconomy
+participant onramp
+participant socials
+participant "Third-party Ticket Provider" as thirdInfra
+participant "Reclaim" as reclaim
+participant "Lit Protocol" as lit
+participant "Backend" as backend
+participant "dTicket Smart Contract" as dTicket
+participant "Marketplace Smart Contract" as marketplace
+
+'Define the flow
+ed -> dApp : Login
+dApp -> privy : login with MPC Wallet
+privy -> dApp : return instance
+dApp -> biconomy : create smart account
+biconomy -> dApp : return smart account address
+dApp -> reclaim : use custom provider to verify ticket
+reclaim -> dApp : return provider instance
+dApp -> thirdInfra : login and fetch ticket with injected provider
+thirdInfra -> dApp : return ticket
+dApp -> dApp : generate proof
+dApp -> socials : connect and fetch information with injected provider
+socials -> dApp : social stats
+dApp -> dApp : generate proof of humanity and provide score
+dApp -> lit : encyrpt ticket
+lit -> dApp : return encrypted ticket data
+dApp -> backend : store ticket data
+backend -> dApp : return storage hash
+dApp -> dTicket : mint dTicket
+dTicket -> marketplace : list for sale
+marketplace -> dTicket : return listingId
+dTicket -> dApp : return success
+dApp -> ed : show listing
+
+== After Sale ==
+
+ed -> dApp : withdraw funds
+dApp -> onramp : request off-ramp
+onramp -> ed : deposit Fiat
+
+@enduml

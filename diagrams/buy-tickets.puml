@@ -1,0 +1,43 @@
+@startuml
+skinparam MaxMessageSize 120
+skinparam Padding 9
+
+title "Dua Lipa wants to buy taylor Swift ticket"
+
+'Define participants
+actor "Dua Lipa" as dua
+participant dApp
+participant privy
+participant biconomy
+participant onramp
+participant socials
+participant "Lit Protocol" as lit
+participant "Backend" as backend
+participant "dTicket Smart Contract" as dTicket
+participant "Marketplace Smart Contract" as marketplace
+
+'Define the flow
+dua -> dApp : Login
+dApp -> privy : login with MPC Wallet
+privy -> dApp : return instance
+dApp -> biconomy : create smart account
+biconomy -> dApp : return smart account address
+dApp -> backend : fetch available events and tickets
+backend -> dApp : return(events, ticketListed)
+dApp -> socials : connect and fetch information with injected provider
+socials -> dApp : social stats
+dApp -> dua : show listed tickets with seller information(mutual connections if exist)
+dua -> dApp : select and purchase ticket
+dApp -> onramp : deposit funds
+onramp -> dApp : deposit funds to smart account
+dApp -> marketplace : make purchase
+marketplace -> marketplace : transfer funds to seller and deduct fees
+marketplace -> dTicket : transfer ticket ownership
+dTicket -> marketplace : return success
+marketplace -> dApp : return success
+dApp -> backend : fetch encrypted ticket
+backend -> dApp : return(encryptedTicket)
+dApp -> lit : decrypt ticket
+lit -> dApp : return decrypted ticket data
+dApp -> dua : show purchased ticket
+@enduml

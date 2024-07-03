@@ -1,0 +1,22 @@
+@startuml
+skinparam MaxMessageSize 120
+skinparam Padding 9
+
+title "Register a new event to allow ticket listing"
+
+'Define Actors
+actor "Trusted Entity" as entity
+participant "Reclaim" as reclaim
+participant "Backend" as backend
+participant "Marketplace" as marketplace
+
+'Define Sequence flow
+entity -> entity : build a provider for event and third-party infra
+entity -> reclaim : register provider
+reclaim -> entity : return confirmation
+entity -> backend : store provider identifier and event information
+backend -> entity : return hash
+entity -> marketplace : register event and store hash
+marketplace -> entity : success
+
+@enduml

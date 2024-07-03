@@ -1,0 +1,54 @@
+@startuml
+skinparam MaxMessageSize 120
+skinparam Padding 9
+skinparam ComponentStyle rectangle
+
+title "System Design"
+
+'Define components
+rectangle "Smart Contracts" as smartcontracts {
+    component "Marketplace" as marketplace
+    component "dTicket" as dticket
+}
+component "Backend" as backend
+rectangle "Encrypt/Decrypt Ticket" {
+    component "Lit Protocol" as lit
+}
+interface "dApp" as dApp
+component "On-ramp" as onramp
+rectangle "Account Abstraction" {
+    component "Privy" as privy
+    component "Biconomy" as biconomy
+}
+rectangle "Proof Generation" {
+    component "Reclaim" as reclaim
+    component "Third-party Ticket Infra" as ticketInfra
+    component "Socials" as socials
+}
+
+'Define System
+dApp -- marketplace : list/trade
+
+dApp -- dticket : mint/transfer
+
+dApp -- backend : store encrypted ticket
+
+dApp -up-- reclaim : proof generation
+
+dApp -up-- lit : encrypt/decrypt
+
+dApp -up-- onramp : onramp funds
+
+dApp -up-- privy : auth
+
+dApp -up-- biconomy : gasless trx
+
+dApp - socials : generate human score
+
+dApp - ticketInfra : fetch ticket
+
+dticket - marketplace : list ticket
+
+backend - smartcontracts : index
+
+@enduml
